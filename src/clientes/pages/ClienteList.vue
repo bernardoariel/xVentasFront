@@ -1,13 +1,34 @@
 <script setup lang="ts">
+import ventasApi from '@/api/ventasApi';
+import { useQuery } from '@tanstack/vue-query';
+
 
 
 const props = defineProps<{title?:string}>()
 
+const getClientes = async():Promise<any[]> =>{
 
-/* interface Props{
-  title: string;
+return new Promise((resolve)=>{
+    setTimeout(async () => {
+        
+        const clientes= await (await ventasApi.get<any>('/clientes')).data;
+        console.log('clientes::: ', clientes);
+        
+        //resolve(clientes)
+        
+    }, 1);
+})
+
 }
-const props = defineProps<Props>() */
+const { isLoading, isError, data:characters, error} = useQuery(
+    ['clientes'],
+    getClientes,
+    {
+        cacheTime: 1000 * 60,
+        refetchOnReconnect:'always' 
+    }
+) 
+
 
 </script>
 <template>
