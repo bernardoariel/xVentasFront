@@ -1,3 +1,4 @@
+
 import { createApp } from 'vue';
 import App from './App.vue';
 import { router } from './router';
@@ -9,8 +10,20 @@ import VueTablerIcons from 'vue-tabler-icons';
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import Maska from 'maska';
 const app = createApp(App);
+// en el main.ts
+// app.use(VueQueryPlugin)
 
-app.use(VueQueryPlugin)
+VueQueryPlugin.install(app,{
+    queryClientConfig:{
+        defaultOptions:{
+            queries: {
+                cacheTime: 1000* 120, // 2 minutos
+                refetchOnReconnect: 'always'
+            }
+        }
+    }
+})
+
 app.use(router);
 app.use(PerfectScrollbar);
 app.use(VueTablerIcons);

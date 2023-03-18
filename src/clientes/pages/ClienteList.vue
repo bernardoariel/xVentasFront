@@ -1,38 +1,31 @@
 <script setup lang="ts">
-import ventasApi from '@/api/ventasApi';
-import { useQuery } from '@tanstack/vue-query';
-
-
+import DataTable from '../components/DataTable.vue';
+import useClientes from '../composables/useClientes';
 
 const props = defineProps<{title?:string}>()
 
-const getClientes = async():Promise<any[]> =>{
+const {
+    clientes,
+    isLoading,
+    hasError,
+    errorMessage,
+    count 
+} = useClientes();
 
-return new Promise((resolve)=>{
-    setTimeout(async () => {
-        
-        const clientes= await (await ventasApi.get<any>('/clientes')).data;
-        console.log('clientes::: ', clientes);
-        
-        //resolve(clientes)
-        
-    }, 1);
-})
-
-}
-const { isLoading, isError, data:characters, error} = useQuery(
-    ['clientes'],
-    getClientes,
-    {
-        cacheTime: 1000 * 60,
-        refetchOnReconnect:'always' 
-    }
-) 
-
+console.log('clientes::: ', clientes);
 
 </script>
 <template>
-        <h1>{{ props.title  }}</h1>
+        <h1 v-if="isLoading">Loading</h1>
+        <div v-else-if="hasError">
+            <h1>Error al cargar</h1>
+            <p>{{ errorMessage }}</p>
+        </div>
+        <template v-else>
+            <h1>{{ props.title }} - {{  count  }}</h1>
+            
+            <DataTable :clientes="clientes" /> 
+        </template>
 </template>
 
 
