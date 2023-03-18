@@ -9,7 +9,7 @@ export const clientesRoute:RouteRecordRaw = {
     component: () => import('@/layouts/full/FullLayout.vue'),
     children: [
         {
-            path: 'by/id',
+            path: 'by/:id',
             name:'cliente-id',
             props:{ title: 'Por Id',visible:false},
             component:ClienteId
